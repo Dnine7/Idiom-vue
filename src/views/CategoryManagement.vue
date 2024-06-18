@@ -58,7 +58,7 @@ export default {
     },
     showAddDialog() {
       this.dialogVisible = true
-      this.currentType = {name: ''}
+      this.currentType = {id: '', name: ''}
     },
     saveCategory() {
       if (this.currentType.id !== '') {

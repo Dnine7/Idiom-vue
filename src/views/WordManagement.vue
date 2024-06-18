@@ -91,7 +91,7 @@ export default {
       this.dialogVisible = true
       console.log(this.dialogVisible)
 
-      this.currentWord = {name: '', mean: '', type: '', group: ''}
+      this.currentWord = {id: '', name: '', mean: '', type: '', group: ''}
     },
     saveWord() {
       if (this.currentWord.id !== '') {

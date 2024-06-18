@@ -17,10 +17,11 @@ export default {
         return apiClient.get(`/idiom/${id}`)
     },
     createWord(params) {
-        return apiClient.post('/idiom/add', {params})
+        return apiClient.post('/idiom/add', params)
     },
-    updateWord(params) {
-        return apiClient.put(`/idiom/update`, {params})
+    updateWord(id,params) {
+        params.id = id
+        return apiClient.put(`/idiom/update`, params)
     },
     deleteWord(id) {
         return apiClient.delete(`/idiom/delete/${id}`)
@@ -35,7 +36,6 @@ export default {
     },
     updateCategory(id,params) {
         params.id = id
-        console.log(id,params)
         return apiClient.put(`/type/update`, params)
     },
     deleteCategory(id) {
@@ -47,10 +47,11 @@ export default {
         return apiClient.get('/group/list')
     },
     createGroup(group) {
-        return apiClient.post('/group/add', {group})
+        return apiClient.post('/group/add', group)
     },
-    updateGroup(group) {
-        return apiClient.put(`/group/update`, {group})
+    updateGroup(id,group) {
+        group.id = id
+        return apiClient.put(`/group/update`, group)
     },
     deleteGroup(id) {
         return apiClient.delete(`/groups/delete/${id}`)

@@ -42,7 +42,7 @@ export default {
       groups: [],
       dialogVisible: false,
       currentGroup: {
-        id:'',
+        id: '',
         name: '',
       },
     }
@@ -57,10 +57,10 @@ export default {
       console.log(this.dialogVisible)
       this.dialogVisible = true
       console.log(this.dialogVisible)
-      this.currentGroup = { name: '' }
+      this.currentGroup = {id: '', name: ''}
     },
     saveGroup() {
-      if (this.currentGroup.id !=='') {
+      if (this.currentGroup.id !== '') {
         api.updateGroup(this.currentGroup.id, this.currentGroup).then(() => {
           this.fetchGroups()
           this.dialogVisible = false
@@ -73,7 +73,7 @@ export default {
       }
     },
     editGroup(group) {
-      this.currentGroup = { ...group }
+      this.currentGroup = {...group}
       this.dialogVisible = true
     },
     deleteGroup(id) {
