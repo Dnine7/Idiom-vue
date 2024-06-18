@@ -2,7 +2,12 @@
   <el-container>
     <el-header>分类管理</el-header>
     <el-main>
-      <el-table :data="categories">
+      <el-row>
+        <el-col :span="4">
+          <el-button @click="fetchCategories" type="primary">搜索</el-button>
+        </el-col>
+      </el-row>
+      <el-table :data="types">
         <el-table-column prop="name" label="名称"></el-table-column>
         <el-table-column label="操作">
           <template v-slot="scope">
@@ -13,10 +18,10 @@
       </el-table>
       <el-button @click="showAddDialog" type="primary">添加分类</el-button>
 
-      <el-dialog :visible.sync="dialogVisible" title="添加分类">
-        <el-form :model="currentCategory">
+      <el-dialog v-model="dialogVisible" title="添加分类">
+        <el-form :model="currentType">
           <el-form-item label="名称">
-            <el-input v-model="currentCategory.name"></el-input>
+            <el-input v-model="currentType.name"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -34,9 +39,10 @@ import api from '../api'
 export default {
   data() {
     return {
-      categories: [],
+      types: [],
       dialogVisible: false,
-      currentCategory: {
+      currentType: {
+        id: '',
         name: '',
       },
     }
@@ -44,28 +50,31 @@ export default {
   methods: {
     fetchCategories() {
       api.getCategories().then(response => {
-        this.categories = response.data
+        console.log(this.types)
+        console.log(response.data.data)
+        this.types = response.data.data
+        console.log(this.types)
       })
     },
     showAddDialog() {
       this.dialogVisible = true
-      this.currentCategory = { name: '' }
+      this.currentType = {name: ''}
     },
     saveCategory() {
-      if (this.currentCategory.id) {
-        api.updateCategory(this.currentCategory.id, this.currentCategory).then(() => {
+      if (this.currentType.id !== '') {
+        api.updateCategory(this.currentType.id, this.currentType).then(() => {
           this.fetchCategories()
           this.dialogVisible = false
         })
       } else {
-        api.createCategory(this.currentCategory).then(() => {
+        api.createCategory(this.currentType).then(() => {
           this.fetchCategories()
           this.dialogVisible = false
         })
       }
     },
     editCategory(category) {
-      this.currentCategory = { ...category }
+      this.currentType = {...category}
       this.dialogVisible = true
     },
     deleteCategory(id) {

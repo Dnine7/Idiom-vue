@@ -31,10 +31,12 @@ export default {
         return apiClient.get('/type/list')
     },
     createCategory(params) {
-        return apiClient.post('/type/add', {params})
+        return apiClient.post('/type/add', params)
     },
-    updateCategory(params) {
-        return apiClient.put(`/type/update`, {params})
+    updateCategory(id,params) {
+        params.id = id
+        console.log(id,params)
+        return apiClient.put(`/type/update`, params)
     },
     deleteCategory(id) {
         return apiClient.delete(`/type/delete/${id}`)

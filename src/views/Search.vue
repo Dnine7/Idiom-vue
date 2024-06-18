@@ -3,12 +3,15 @@
     <el-header>单词查询</el-header>
     <el-main>
       <el-form :inline="true" :model="searchCriteria">
+        <el-form-item label="名称">
+          <el-input v-model="searchCriteria.name"></el-input>
+        </el-form-item>
         <el-form-item label="词义">
-          <el-input v-model="searchCriteria.definition"></el-input>
+          <el-input v-model="searchCriteria.mean"></el-input>
         </el-form-item>
         <el-form-item label="分类">
-          <el-select v-model="searchCriteria.category" placeholder="选择分类">
-            <el-option v-for="category in categories" :key="category.id" :label="category.name" :value="category.id"></el-option>
+          <el-select v-model="searchCriteria.type" placeholder="选择分类">
+            <el-option v-for="type in types" :key="type.id" :label="type.name" :value="type.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="编组">
@@ -22,8 +25,8 @@
       </el-form>
       <el-table :data="words">
         <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="definition" label="释义"></el-table-column>
-        <el-table-column prop="category" label="分类"></el-table-column>
+        <el-table-column prop="mean" label="释义"></el-table-column>
+        <el-table-column prop="type" label="分类"></el-table-column>
         <el-table-column prop="group" label="编组"></el-table-column>
       </el-table>
     </el-main>
@@ -37,11 +40,12 @@ export default {
   data() {
     return {
       words: [],
-      categories: [],
+      types: [],
       groups: [],
       searchCriteria: {
-        definition: '',
-        category: '',
+        name: '',
+        mean: '',
+        type: '',
         group: '',
       },
     }
@@ -49,17 +53,17 @@ export default {
   methods: {
     fetchCategories() {
       api.getCategories().then(response => {
-        this.categories = response.data
+        this.types = response.data.data
       })
     },
     fetchGroups() {
       api.getGroups().then(response => {
-        this.groups = response.data
+        this.groups = response.data.data
       })
     },
     searchWords() {
       api.searchWords(this.searchCriteria).then(response => {
-        this.words = response.data
+        this.words = response.data.data
       })
     },
   },

@@ -2,6 +2,11 @@
   <el-container>
     <el-header>编组管理</el-header>
     <el-main>
+      <el-row>
+        <el-col :span="4">
+          <el-button @click="fetchGroups" type="primary">搜索</el-button>
+        </el-col>
+      </el-row>
       <el-table :data="groups">
         <el-table-column prop="name" label="名称"></el-table-column>
         <el-table-column label="操作">
@@ -13,7 +18,7 @@
       </el-table>
       <el-button @click="showAddDialog" type="primary">添加编组</el-button>
 
-      <el-dialog :visible.sync="dialogVisible" title="添加编组">
+      <el-dialog v-model="dialogVisible" title="添加编组">
         <el-form :model="currentGroup">
           <el-form-item label="名称">
             <el-input v-model="currentGroup.name"></el-input>
@@ -37,6 +42,7 @@ export default {
       groups: [],
       dialogVisible: false,
       currentGroup: {
+        id:'',
         name: '',
       },
     }
@@ -44,15 +50,17 @@ export default {
   methods: {
     fetchGroups() {
       api.getGroups().then(response => {
-        this.groups = response.data
+        this.groups = response.data.data
       })
     },
     showAddDialog() {
+      console.log(this.dialogVisible)
       this.dialogVisible = true
+      console.log(this.dialogVisible)
       this.currentGroup = { name: '' }
     },
     saveGroup() {
-      if (this.currentGroup.id) {
+      if (this.currentGroup.id !=='') {
         api.updateGroup(this.currentGroup.id, this.currentGroup).then(() => {
           this.fetchGroups()
           this.dialogVisible = false

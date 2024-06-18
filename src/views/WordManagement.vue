@@ -2,10 +2,15 @@
   <el-container>
     <el-header>单词管理</el-header>
     <el-main>
+      <el-row>
+        <el-col :span="4">
+          <el-button @click="fetchWords" type="primary">搜索</el-button>
+        </el-col>
+      </el-row>
       <el-table :data="words">
         <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="definition" label="释义"></el-table-column>
-        <el-table-column prop="category" label="分类"></el-table-column>
+        <el-table-column prop="mean" label="释义"></el-table-column>
+        <el-table-column prop="type" label="分类"></el-table-column>
         <el-table-column prop="group" label="编组"></el-table-column>
         <el-table-column label="操作">
           <template v-slot="scope">
@@ -16,17 +21,17 @@
       </el-table>
       <el-button @click="showAddDialog" type="primary">添加单词</el-button>
 
-      <el-dialog :visible.sync="dialogVisible" title="添加单词">
+      <el-dialog v-model="dialogVisible" title="添加单词">
         <el-form :model="currentWord">
           <el-form-item label="名称">
             <el-input v-model="currentWord.name"></el-input>
           </el-form-item>
           <el-form-item label="释义">
-            <el-input v-model="currentWord.definition"></el-input>
+            <el-input v-model="currentWord.mean"></el-input>
           </el-form-item>
           <el-form-item label="分类">
-            <el-select v-model="currentWord.category" placeholder="选择分类">
-              <el-option v-for="category in categories" :key="category.id" :label="category.name" :value="category.id"></el-option>
+            <el-select v-model="currentWord.type" placeholder="选择分类">
+              <el-option v-for="type in types" :key="type.id" :label="type.name" :value="type.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="编组">
@@ -51,13 +56,14 @@ export default {
   data() {
     return {
       words: [],
-      categories: [],
+      types: [],
       groups: [],
       dialogVisible: false,
       currentWord: {
+        id: '',
         name: '',
-        definition: '',
-        category: '',
+        mean: '',
+        type: '',
         group: '',
       },
     }
@@ -65,25 +71,30 @@ export default {
   methods: {
     fetchWords() {
       api.getWords().then(response => {
-        this.words = response.data
+        console.log("response");
+        console.log(response);
+        this.words = response.data.data
       })
     },
     fetchCategories() {
       api.getCategories().then(response => {
-        this.categories = response.data
+        this.types = response.data.data
       })
     },
     fetchGroups() {
       api.getGroups().then(response => {
-        this.groups = response.data
+        this.groups = response.data.data
       })
     },
     showAddDialog() {
+      console.log(this.dialogVisible)
       this.dialogVisible = true
-      this.currentWord = { name: '', definition: '', category: '', group: '' }
+      console.log(this.dialogVisible)
+
+      this.currentWord = {name: '', mean: '', type: '', group: ''}
     },
     saveWord() {
-      if (this.currentWord.id) {
+      if (this.currentWord.id !== '') {
         api.updateWord(this.currentWord.id, this.currentWord).then(() => {
           this.fetchWords()
           this.dialogVisible = false
@@ -96,7 +107,7 @@ export default {
       }
     },
     editWord(word) {
-      this.currentWord = { ...word }
+      this.currentWord = {...word}
       this.dialogVisible = true
     },
     deleteWord(id) {
