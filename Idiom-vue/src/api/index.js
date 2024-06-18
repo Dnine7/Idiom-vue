@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-    baseURL: 'http://idiom.dnine7.com/api/idiom',
+    baseURL: 'http://localhost:779/api',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -11,51 +11,51 @@ const apiClient = axios.create({
 export default {
     // 单词相关接口
     getWords() {
-        return apiClient.get('/words')
+        return apiClient.get('/idiom/list')
     },
     getWord(id) {
-        return apiClient.get(`/words/${id}`)
+        return apiClient.get(`/idiom/${id}`)
     },
-    createWord(word) {
-        return apiClient.post('/words', word)
+    createWord(params) {
+        return apiClient.post('/idiom/add', {params})
     },
-    updateWord(id, word) {
-        return apiClient.put(`/words/${id}`, word)
+    updateWord(params) {
+        return apiClient.put(`/idiom/update`, {params})
     },
     deleteWord(id) {
-        return apiClient.delete(`/words/${id}`)
+        return apiClient.delete(`/idiom/delete/${id}`)
     },
 
     // 分类相关接口
     getCategories() {
-        return apiClient.get('/categories')
+        return apiClient.get('/type/list')
     },
-    createCategory(category) {
-        return apiClient.post('/categories', category)
+    createCategory(params) {
+        return apiClient.post('/type/add', {params})
     },
-    updateCategory(id, category) {
-        return apiClient.put(`/categories/${id}`, category)
+    updateCategory(params) {
+        return apiClient.put(`/type/update`, {params})
     },
     deleteCategory(id) {
-        return apiClient.delete(`/categories/${id}`)
+        return apiClient.delete(`/type/delete/${id}`)
     },
 
     // 编组相关接口
     getGroups() {
-        return apiClient.get('/groups')
+        return apiClient.get('/group/list')
     },
     createGroup(group) {
-        return apiClient.post('/groups', group)
+        return apiClient.post('/group/add', {group})
     },
-    updateGroup(id, group) {
-        return apiClient.put(`/groups/${id}`, group)
+    updateGroup(group) {
+        return apiClient.put(`/group/update`, {group})
     },
     deleteGroup(id) {
-        return apiClient.delete(`/groups/${id}`)
+        return apiClient.delete(`/groups/delete/${id}`)
     },
 
     // 查询接口
     searchWords(params) {
-        return apiClient.get('/search', { params })
+        return apiClient.get('/idiom/list', {params})
     },
 }
