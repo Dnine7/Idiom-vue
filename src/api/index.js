@@ -59,6 +59,6 @@ export default {
 
     // 查询接口
     searchWords(params) {
-        return apiClient.get('/idiom/list', {params})
+        return apiClient.post('/idiom/list', params)
     },
 }

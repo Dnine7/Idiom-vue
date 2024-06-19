@@ -21,7 +21,10 @@
       <el-dialog v-model="dialogVisible" title="添加分类">
         <el-form :model="currentType">
           <el-form-item label="名称">
-            <el-input v-model="currentType.name"></el-input>
+            <el-input v-model="currentType.name" placeholder="请输入名称"></el-input>
+          </el-form-item>
+          <el-form-item label="颜色">
+            <el-color-picker v-model="currentType.color" color-format="rgb" @change="colorChange"/>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -35,6 +38,7 @@
 
 <script>
 import api from '../api'
+import {ElMessage} from "element-plus";
 
 export default {
   data() {
@@ -44,10 +48,43 @@ export default {
       currentType: {
         id: '',
         name: '',
+        color:'',
       },
     }
   },
   methods: {
+    colorChange(value){
+      this.currentType.color = this.rgbaToHex(value)
+    },
+    rgbaToHex(rgba){
+      // 提取 RGBA 分量
+      const match = rgba.match(/rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*(\d*\.?\d+)?\)/);
+
+      if (!match) {
+        throw new Error('Invalid RGBA color');
+      }
+
+      const r = parseInt(match[1], 10);
+      const g = parseInt(match[2], 10);
+      const b = parseInt(match[3], 10);
+      let a = parseFloat(match[4] || 0.3); // 透明度默认为 0.3
+
+      // 转换为 HEX
+      const toHex = (n) => {
+        const hex = n.toString(16);
+        return hex.length === 1 ? '0' + hex : hex; // 保证两位
+      };
+
+      const hexR = toHex(r);
+      const hexG = toHex(g);
+      const hexB = toHex(b);
+
+      // 转换透明度
+      const hexA = toHex(Math.round(a * 255));
+
+      // 如果透明度为 1，返回 #RRGGBB，否则返回 #RRGGBBAA
+      return a === 1 ? `#${hexR}${hexG}${hexB}` : `#${hexR}${hexG}${hexB}${hexA}`;
+    },
     fetchCategories() {
       api.getCategories().then(response => {
         console.log(this.types)
@@ -62,14 +99,24 @@ export default {
     },
     saveCategory() {
       if (this.currentType.id !== '') {
-        api.updateCategory(this.currentType.id, this.currentType).then(() => {
-          this.fetchCategories()
-          this.dialogVisible = false
+        api.updateCategory(this.currentType.id, this.currentType).then(response => {
+          const code = response.data.code
+          if (code === 200) {
+            this.fetchCategories();
+            this.dialogVisible = false
+          }else {
+            ElMessage.error(response.data.message)
+          }
         })
       } else {
-        api.createCategory(this.currentType).then(() => {
-          this.fetchCategories()
-          this.dialogVisible = false
+        api.createCategory(this.currentType).then(response => {
+          const code = response.data.code
+          if (code === 200) {
+            this.fetchCategories();
+            this.dialogVisible = false
+          }else {
+            ElMessage.error(response.data.message)
+          }
         })
       }
     },
