@@ -6,10 +6,10 @@ import GroupManagement from '../views/GroupManagement.vue'
 import Search from '../views/Search.vue'
 
 const routes = [
-    { path: '/', component: WordManagement },
+    { path: '/words', component: WordManagement },
     { path: '/categories', component: CategoryManagement },
     { path: '/groups', component: GroupManagement },
-    { path: '/search', component: Search },
+    { path: '/', component: Search },
 ]
 
 const router = createRouter({
