@@ -2,7 +2,8 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost:779/api',
+    // baseURL: 'http://localhost:779/api',
+    baseURL: 'http://api.idiom.dnine7.com/api',
     headers: {
         'Content-Type': 'application/json',
     },
