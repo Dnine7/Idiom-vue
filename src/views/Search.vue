@@ -25,12 +25,12 @@
           <el-input v-model="searchCriteria.mean"></el-input>
         </el-form-item>
         <el-form-item label="分类">
-          <el-select v-model="searchCriteria.typeId" placeholder="选择分类" style="width: 192px" clearable="true">
+          <el-select v-model="searchCriteria.typeId" placeholder="选择分类" style="width: 192px" clearable filterable>
             <el-option v-for="type in types" :key="type.id" :label="type.name" :value="type.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="编组">
-          <el-select v-model="searchCriteria.groupId" placeholder="选择编组" style="width: 192px" clearable="true">
+          <el-select v-model="searchCriteria.groupId" placeholder="选择编组" style="width: 192px" clearable filterable>
             <el-option v-for="group in groups" :key="group.id" :label="group.name" :value="group.id"></el-option>
           </el-select>
         </el-form-item>
@@ -39,8 +39,12 @@
           <el-button @click="showAddDialog" type="primary">添加单词</el-button>
         </el-form-item>
       </el-form>
-      <el-table :data="words"
-      :row-style="rowStyle"
+      <el-table
+          :data="words"
+          :row-style="rowStyle"
+          :header-cell-style="{textAlign: 'center'}"
+          :cell-style="{textAlign: 'center'}"
+          border
       >
         <el-table-column prop="name" label="名称"></el-table-column>
         <el-table-column prop="mean" label="释义"></el-table-column>
@@ -85,6 +89,7 @@
 
 <script>
 import api from '../api'
+//todo remake 备注，褒贬，例句
 import {ElMessage} from "element-plus";
 
 export default {

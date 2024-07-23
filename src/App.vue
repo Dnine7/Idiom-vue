@@ -6,6 +6,8 @@
 <!--        <el-menu-item index="/words" @click="goTo('/words')">单词管理</el-menu-item>-->
         <el-menu-item index="/categories" @click="goTo('/categories')">分类管理</el-menu-item>
         <el-menu-item index="/groups" @click="goTo('/groups')">编组管理</el-menu-item>
+        <el-menu-item index="/search" @click="goTo('/search')">单词查询</el-menu-item>
+        <el-menu-item index="/speedMath" @click="goTo('/speedMath')">速算</el-menu-item>
       </el-menu>
     </el-header>
     <el-main>
