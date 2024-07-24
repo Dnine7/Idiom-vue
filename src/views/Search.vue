@@ -50,6 +50,9 @@
         <el-table-column prop="mean" label="释义"></el-table-column>
         <el-table-column prop="type" label="分类"></el-table-column>
         <el-table-column prop="group" label="编组"></el-table-column>
+        <el-table-column prop="sentimentType " label="情感类型"></el-table-column>
+        <el-table-column prop="sentence" label="例句"></el-table-column>
+        <el-table-column prop="remark" label="备注"></el-table-column>
         <el-table-column label="操作">
           <template v-slot="scope">
             <el-button @click="editWord(scope.row)" type="primary">编辑</el-button>
@@ -66,6 +69,9 @@
           <el-form-item label="释义">
             <el-input type="textarea" v-model="currentWord.mean" placeholder="请输入释义"></el-input>
           </el-form-item>
+          <el-form-item label="例句">
+            <el-input type="textarea" v-model="currentWord.sentence" placeholder="请输入例句"></el-input>
+          </el-form-item>
           <el-form-item label="分类">
             <el-select v-model="currentWord.type" placeholder="选择分类" @change="typeChange">
               <el-option v-for="type in types" :key="type.id" :label="type.name" :value="type.id"></el-option>
@@ -75,6 +81,16 @@
             <el-select v-model="currentWord.group" placeholder="选择编组" @change="groupChange">
               <el-option v-for="group in groups" :key="group.id" :label="group.name" :value="group.id"></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="备注">
+            <el-input type="textarea" v-model="currentWord.remark" placeholder="请输入备注"></el-input>
+          </el-form-item>
+          <el-form-item label="情感类型">
+            <el-radio-group v-model="currentWord.sentimentType">
+              <el-radio value="good">褒义</el-radio>
+              <el-radio value="bad">贬义</el-radio>
+              <el-radio value="middle">中性词</el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -89,7 +105,6 @@
 
 <script>
 import api from '../api'
-//todo remake 备注，褒贬，例句
 import {ElMessage} from "element-plus";
 
 export default {
@@ -100,6 +115,20 @@ export default {
       groups: [],
       dialogVisible: false,
       colorBy: 0,
+      sentimentTypes: [
+        {
+          value: 'good',
+          label: '褒义',
+        },
+        {
+          value: 'bad',
+          label: '贬义',
+        },
+        {
+          value: 'middle',
+          label: '中性',
+        },
+      ],
       options:[
         {
           value: 0,
@@ -128,6 +157,9 @@ export default {
         groupId: '',
         group: '',
         groupColor: '',
+        remark:'',
+        sentence:'',
+        sentimentType:'',
       },
     }
   },
@@ -137,6 +169,9 @@ export default {
     },
     groupChange(value){
       this.currentWord.groupId = value;
+    },
+    sentimentTypeChange(value){
+      this.currentWord.sentimentType = value;
     },
     rowStyle({row, rowIndex}) {
       console.log(row)
