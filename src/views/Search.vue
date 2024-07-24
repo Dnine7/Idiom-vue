@@ -50,7 +50,7 @@
         <el-table-column prop="mean" label="释义"></el-table-column>
         <el-table-column prop="type" label="分类"></el-table-column>
         <el-table-column prop="group" label="编组"></el-table-column>
-        <el-table-column prop="sentimentType " label="情感类型"></el-table-column>
+        <el-table-column prop="sentimentType" label="情感类型" :formatter="sentimentTypeFormat"></el-table-column>
         <el-table-column prop="sentence" label="例句"></el-table-column>
         <el-table-column prop="remark" label="备注"></el-table-column>
         <el-table-column label="操作">
@@ -164,6 +164,18 @@ export default {
     }
   },
   methods: {
+    sentimentTypeFormat(row,column,cellValue,index){
+      console.log("cellValue");
+      console.log(cellValue);
+      switch (cellValue) {
+        case "good":
+          return "褒义";
+        case "bad":
+          return "贬义";
+        case "middle":
+          return "中性词";
+      }
+    },
     typeChange(value){
       this.currentWord.typeId = value;
     },
