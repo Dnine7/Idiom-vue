@@ -73,12 +73,12 @@
             <el-input type="textarea" v-model="currentWord.sentence" placeholder="请输入例句"></el-input>
           </el-form-item>
           <el-form-item label="分类">
-            <el-select v-model="currentWord.type" placeholder="选择分类" @change="typeChange">
+            <el-select v-model="currentWord.type" placeholder="选择分类" @change="typeChange" clearable filterable>
               <el-option v-for="type in types" :key="type.id" :label="type.name" :value="type.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="编组">
-            <el-select v-model="currentWord.group" placeholder="选择编组" @change="groupChange">
+            <el-select v-model="currentWord.group" placeholder="选择编组" @change="groupChange" clearable filterable>
               <el-option v-for="group in groups" :key="group.id" :label="group.name" :value="group.id"></el-option>
             </el-select>
           </el-form-item>
