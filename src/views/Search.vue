@@ -45,10 +45,11 @@
           :header-cell-style="{textAlign: 'center'}"
           :cell-style="{textAlign: 'center'}"
           border
+          show-overflow-tooltip
       >
         <el-table-column prop="type" label="分类"></el-table-column>
         <el-table-column prop="group" label="编组"></el-table-column>
-        <el-table-column prop="name" label="名称"></el-table-column>
+        <el-table-column class-name="bold-cell" prop="name" label="名称"></el-table-column>
         <el-table-column prop="mean" label="释义"></el-table-column>
         <el-table-column prop="sentimentType" label="情感类型" :formatter="sentimentTypeFormat"></el-table-column>
         <el-table-column prop="sentence" label="例句"></el-table-column>
@@ -290,3 +291,9 @@ export default {
   },
 }
 </script>
+
+<style>
+.bold-cell {
+  font-weight: 1000;
+}
+</style>
