@@ -46,10 +46,10 @@
           :cell-style="{textAlign: 'center'}"
           border
       >
-        <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="mean" label="释义"></el-table-column>
         <el-table-column prop="type" label="分类"></el-table-column>
         <el-table-column prop="group" label="编组"></el-table-column>
+        <el-table-column prop="name" label="名称"></el-table-column>
+        <el-table-column prop="mean" label="释义"></el-table-column>
         <el-table-column prop="sentimentType" label="情感类型" :formatter="sentimentTypeFormat"></el-table-column>
         <el-table-column prop="sentence" label="例句"></el-table-column>
         <el-table-column prop="remark" label="备注"></el-table-column>
@@ -60,6 +60,16 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+          :page-size="currentPageSize"
+          :current-page="currentPage"
+          :page-sizes="pageSize"
+          layout="sizes, prev, pager, next"
+          :total="total"
+          @current-change="handleCurrentChange"
+          @update:page-size="handleCurrentPageChange"
+      >
+      </el-pagination>
 
       <el-dialog v-model="dialogVisible" title="单词">
         <el-form :model="currentWord">
@@ -110,6 +120,10 @@ import {ElMessage} from "element-plus";
 export default {
   data() {
     return {
+      currentPage: 1,
+      pageSize: [10, 20, 50, 100],
+      currentPageSize: 10,
+      total: 0,
       words: [],
       types: [],
       groups: [],
@@ -129,7 +143,7 @@ export default {
           label: '中性',
         },
       ],
-      options:[
+      options: [
         {
           value: 0,
           label: '分类',
@@ -146,6 +160,8 @@ export default {
         typeId: '',
         group: '',
         groupId: '',
+        page: 1,
+        pageSize: 10
       },
       currentWord: {
         id: '',
@@ -157,16 +173,26 @@ export default {
         groupId: '',
         group: '',
         groupColor: '',
-        remark:'',
-        sentence:'',
-        sentimentType:'',
+        remark: '',
+        sentence: '',
+        sentimentType: '',
       },
     }
   },
   methods: {
-    sentimentTypeFormat(row,column,cellValue,index){
-      console.log("cellValue");
-      console.log(cellValue);
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.searchCriteria.page = this.currentPage
+      this.searchCriteria.pageSize = this.currentPageSize
+      this.searchWords();
+    },
+    handleCurrentPageChange(val){
+      this.currentPageSize = val;
+      this.searchCriteria.page = this.currentPage
+      this.searchCriteria.pageSize = this.currentPageSize
+      this.searchWords();
+    },
+    sentimentTypeFormat(row, column, cellValue, index) {
       switch (cellValue) {
         case "good":
           return "褒义";
@@ -176,23 +202,21 @@ export default {
           return "中性词";
       }
     },
-    typeChange(value){
+    typeChange(value) {
       this.currentWord.typeId = value;
     },
-    groupChange(value){
+    groupChange(value) {
       this.currentWord.groupId = value;
     },
-    sentimentTypeChange(value){
+    sentimentTypeChange(value) {
       this.currentWord.sentimentType = value;
     },
     rowStyle({row, rowIndex}) {
-      console.log(row)
-      console.log(row["typeColor"])
       if (this.colorBy === 0) {
         return {
           backgroundColor: row["typeColor"] || '',
         };
-      }else if (this.colorBy === 1) {
+      } else if (this.colorBy === 1) {
         return {
           backgroundColor: row["groupColor"] || '',
         };
@@ -209,8 +233,11 @@ export default {
       })
     },
     searchWords() {
+      console.log(this.searchCriteria);
       api.searchWords(this.searchCriteria).then(response => {
-        this.words = response.data.data
+        console.log(response.data);
+        this.words = response.data.data.list
+        this.total = response.data.data.total
       })
     },
     showAddDialog() {
@@ -224,7 +251,7 @@ export default {
           if (code === 200) {
             this.searchWords();
             this.dialogVisible = false
-          }else {
+          } else {
             ElMessage.error(response.data.message)
           }
         })
@@ -234,7 +261,7 @@ export default {
           if (code === 200) {
             this.searchWords();
             this.dialogVisible = false
-          }else {
+          } else {
             ElMessage.error(response.data.message)
           }
         })
@@ -250,7 +277,7 @@ export default {
         if (code === 200) {
           this.searchWords();
           this.dialogVisible = false
-        }else {
+        } else {
           ElMessage.error(response.data.message)
         }
       })
