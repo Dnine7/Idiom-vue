@@ -129,7 +129,7 @@ export default {
       types: [],
       groups: [],
       dialogVisible: false,
-      colorBy: 0,
+      colorBy: 1,
       sentimentTypes: [
         {
           value: 'good',
