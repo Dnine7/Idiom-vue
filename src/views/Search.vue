@@ -165,8 +165,8 @@ export default {
         typeId: '',
         group: '',
         groupId: '',
-        page: 1,
-        pageSize: 10
+        page: this.currentPage,
+        pageSize: this.currentPageSize
       },
       currentWord: {
         id: '',
