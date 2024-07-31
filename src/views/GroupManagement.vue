@@ -5,6 +5,7 @@
       <el-row>
         <el-col :span="4">
           <el-button @click="fetchGroups" type="primary">搜索</el-button>
+          <el-button @click="showAddDialog" type="primary">添加编组</el-button>
         </el-col>
       </el-row>
       <el-table :data="groups">
@@ -16,7 +17,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-button @click="showAddDialog" type="primary">添加编组</el-button>
 
       <el-dialog v-model="dialogVisible" title="添加编组">
         <el-form :model="currentGroup">

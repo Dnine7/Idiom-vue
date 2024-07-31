@@ -45,16 +45,16 @@
           :header-cell-style="{textAlign: 'center'}"
           :cell-style="{textAlign: 'center'}"
           border
-          show-overflow-tooltip
       >
-        <el-table-column prop="type" label="分类"></el-table-column>
-        <el-table-column prop="group" label="编组"></el-table-column>
-        <el-table-column class-name="bold-cell" prop="name" label="名称"></el-table-column>
+        <el-table-column width="100" prop="type" label="分类"></el-table-column>
+        <el-table-column width="100" prop="group" label="编组"></el-table-column>
+        <el-table-column width="150" class-name="bold-cell" prop="name" label="名称"></el-table-column>
+        <el-table-column width="100" prop="sentimentType" label="情感类型" :formatter="sentimentTypeFormat"></el-table-column>
+        <el-table-column width="100" prop="collocation" label="常见搭配"></el-table-column>
         <el-table-column prop="mean" label="释义"></el-table-column>
-        <el-table-column prop="sentimentType" label="情感类型" :formatter="sentimentTypeFormat"></el-table-column>
         <el-table-column prop="sentence" label="例句"></el-table-column>
         <el-table-column prop="remark" label="备注"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column width="180" label="操作">
           <template v-slot="scope">
             <el-button @click="editWord(scope.row)" type="primary">编辑</el-button>
             <el-button @click="deleteWord(scope.row.id)" type="danger">删除</el-button>
@@ -82,6 +82,9 @@
           </el-form-item>
           <el-form-item label="例句">
             <el-input type="textarea" v-model="currentWord.sentence" placeholder="请输入例句"></el-input>
+          </el-form-item>
+          <el-form-item label="常见搭配">
+            <el-input type="textarea" v-model="currentWord.collocation" placeholder="请输入常见搭配"></el-input>
           </el-form-item>
           <el-form-item label="分类">
             <el-select v-model="currentWord.type" placeholder="选择分类" @change="typeChange" clearable filterable>
@@ -122,8 +125,8 @@ export default {
   data() {
     return {
       currentPage: 1,
-      pageSize: [10, 20, 50, 100],
-      currentPageSize: 10,
+      pageSize: [100, 200, 500, 1000],
+      currentPageSize: 100,
       total: 0,
       words: [],
       types: [],
@@ -177,6 +180,7 @@ export default {
         remark: '',
         sentence: '',
         sentimentType: '',
+        collocation: ''
       },
     }
   },
@@ -242,8 +246,10 @@ export default {
       })
     },
     showAddDialog() {
+      this.fetchCategories()
+      this.fetchGroups()
       this.dialogVisible = true
-      this.currentWord = {id: '', name: '', mean: '', type: '', group: ''}
+      this.currentWord = {id: '', name: '', mean: '', type: '', group: '',collocation: ''}
     },
     saveWord() {
       if (this.currentWord.id !== '') {

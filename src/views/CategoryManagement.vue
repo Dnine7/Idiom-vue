@@ -5,6 +5,7 @@
       <el-row>
         <el-col :span="4">
           <el-button @click="fetchCategories" type="primary">搜索</el-button>
+          <el-button @click="showAddDialog" type="primary">添加分类</el-button>
         </el-col>
       </el-row>
       <el-table :data="types">
@@ -16,7 +17,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-button @click="showAddDialog" type="primary">添加分类</el-button>
 
       <el-dialog v-model="dialogVisible" title="添加分类">
         <el-form :model="currentType">
