@@ -83,9 +83,7 @@
           <el-form-item label="例句">
             <el-input type="textarea" v-model="currentWord.sentence" placeholder="请输入例句"></el-input>
           </el-form-item>
-          <el-form-item label="常见搭配">
-            <el-input type="textarea" v-model="currentWord.collocation" placeholder="请输入常见搭配"></el-input>
-          </el-form-item>
+
           <el-form-item label="分类">
             <el-select v-model="currentWord.type" placeholder="选择分类" @change="typeChange" clearable filterable>
               <el-option v-for="type in types" :key="type.id" :label="type.name" :value="type.id"></el-option>
@@ -98,6 +96,9 @@
           </el-form-item>
           <el-form-item label="备注">
             <el-input type="textarea" v-model="currentWord.remark" placeholder="请输入备注"></el-input>
+          </el-form-item>
+          <el-form-item label="常见搭配">
+            <el-input type="textarea" v-model="currentWord.collocation" placeholder="请输入常见搭配"></el-input>
           </el-form-item>
           <el-form-item label="情感类型">
             <el-radio-group v-model="currentWord.sentimentType">
