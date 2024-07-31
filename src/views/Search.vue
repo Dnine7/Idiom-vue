@@ -43,15 +43,15 @@
           :data="words"
           :row-style="rowStyle"
           :header-cell-style="{textAlign: 'center'}"
-          :cell-style="{textAlign: 'center'}"
+          :cell-style="cellStyle"
           border
       >
         <el-table-column width="100" prop="type" label="分类"></el-table-column>
         <el-table-column width="100" prop="group" label="编组"></el-table-column>
         <el-table-column width="150" class-name="bold-cell" prop="name" label="名称"></el-table-column>
+        <el-table-column prop="mean" label="释义"></el-table-column>
         <el-table-column width="100" prop="sentimentType" label="情感类型" :formatter="sentimentTypeFormat"></el-table-column>
         <el-table-column width="100" prop="collocation" label="常见搭配"></el-table-column>
-        <el-table-column prop="mean" label="释义"></el-table-column>
         <el-table-column prop="sentence" label="例句"></el-table-column>
         <el-table-column prop="remark" label="备注"></el-table-column>
         <el-table-column width="180" label="操作">
@@ -107,9 +107,12 @@
               <el-radio value="middle">中性词</el-radio>
             </el-radio-group>
           </el-form-item>
+          <el-form-item label="字体颜色">
+            <el-color-picker v-model="currentWord.fontColor" color-format="rgb" @change="colorChange"/>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button @click="cancel">取消</el-button>
           <el-button @click="saveWord" type="primary">保存</el-button>
         </div>
       </el-dialog>
@@ -126,8 +129,8 @@ export default {
   data() {
     return {
       currentPage: 1,
-      pageSize: [100, 200, 500, 1000],
-      currentPageSize: 100,
+      pageSize: [10, 50, 100, 200],
+      currentPageSize: 50,
       total: 0,
       words: [],
       types: [],
@@ -165,8 +168,8 @@ export default {
         typeId: '',
         group: '',
         groupId: '',
-        page: this.currentPage,
-        pageSize: this.currentPageSize
+        page: 1,
+        pageSize: 50
       },
       currentWord: {
         id: '',
@@ -181,11 +184,34 @@ export default {
         remark: '',
         sentence: '',
         sentimentType: '',
-        collocation: ''
+        collocation: '',
+        fontColor:''
       },
     }
   },
   methods: {
+    cancel(){
+      this.dialogVisible = false
+      this.currentWord = {
+        id: '',
+        name: '',
+        mean: '',
+        typeId: '',
+        type: '',
+        typeColor: '',
+        groupId: '',
+        group: '',
+        groupColor: '',
+        remark: '',
+        sentence: '',
+        sentimentType: '',
+        collocation: '',
+        fontColor:''
+      }
+    },
+    colorChange(value){
+      this.currentWord.fontColor = this.rgbaToHex(value)
+    },
     handleCurrentChange(val) {
       this.currentPage = val;
       this.searchCriteria.page = this.currentPage
@@ -227,6 +253,20 @@ export default {
           backgroundColor: row["groupColor"] || '',
         };
       }
+    },
+    cellStyle({row, column, rowIndex, columnIndex}) {
+      console.log({rowIndex,columnIndex})
+      if (columnIndex === 2) {
+        return {
+          textAlign: 'center',
+          color: row["fontColor"] || '',
+        };
+      }else {
+        return {
+          textAlign: 'center',
+        };
+      }
+
     },
     fetchCategories() {
       api.getCategories().then(response => {

@@ -3,7 +3,8 @@ import axios from 'axios'
 
 const apiClient = axios.create({
     // baseURL: 'http://localhost:779/api',
-    baseURL: 'http://api.idiom.dnine7.com/api',
+    baseURL: 'http://120.46.174.236:779/api', //华为云
+    // baseURL: 'http://api.idiom.dnine7.com/api',
     headers: {
         'Content-Type': 'application/json',
     },
